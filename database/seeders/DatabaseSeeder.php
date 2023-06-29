@@ -21,21 +21,26 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
         ]);
 
-        $users = User::all(); 
+        $users = User::all();
 
         Group::factory(10)->create()
             ->each(function (Group $group) use ($users) {
-                $group->users()->attach(
-                    $users->random(rand(1,5))->pluck('id')->toArray(),
-                    ['owner' => false]
-                );
+                $userIds = $users->random(rand(1, 5))->pluck('id')->toArray();
+                $owners[] = ['owner' => true];
+
+                for ($i = 1; $i < count($userIds); $i++) {
+                    $owners[] = ['owner' => false];
+                }
+                
+                $group->users()->attach( array_combine($userIds, $owners) );
             });
-
-        // \App\Models\User::factory(10)->create();
-
-        // \App\Models\User::factory()->create([
-        //     'name' => 'Test User',
-        //     'email' => 'test@example.com',
-        // ]);
+            
+            // \App\Models\User::factory(10)->create();
+            
+            // \App\Models\User::factory()->create([
+            //     'name' => 'Test User',
+            //     'email' => 'test@example.com',
+            // ]);
     }
 }
+    
