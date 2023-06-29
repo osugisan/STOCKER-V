@@ -8,4 +8,15 @@ use Illuminate\Database\Eloquent\Model;
 class Group extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        'name',
+        'code',
+    ];
+
+    public function users()
+    {
+        return $this->belongsToMany(User::class)
+            ->withPivot('owner');
+    }
 }
