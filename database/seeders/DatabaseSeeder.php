@@ -5,8 +5,10 @@ namespace Database\Seeders;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 use App\Models\Group;
+use App\Models\Tag;
 use App\Models\User;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class DatabaseSeeder extends Seeder
 {
@@ -34,6 +36,17 @@ class DatabaseSeeder extends Seeder
                 
                 $group->users()->attach( array_combine($userIds, $owners) );
             });
+
+        foreach ($users as $user) {
+            $groupIds = DB::table('group_user')->select('group_id')
+                ->where('user_id', $user->id)
+                ->get();
+
+            $user->main_group = $groupIds[0]->group_id;
+            $user->save();
+        }
+        
+        Tag::factory(50)->create();
             
             // \App\Models\User::factory(10)->create();
             
