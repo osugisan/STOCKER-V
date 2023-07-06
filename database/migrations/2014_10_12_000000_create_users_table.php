@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->integer('main_group');
             $table->boolean('large_item')->default(true);
-            $table->boolean('avatar_img')->nullable();
+            $table->string('avatar_img')->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();
