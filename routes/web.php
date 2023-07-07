@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\GroupController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -43,15 +44,14 @@ Route::get('/items/history', function () {
     return Inertia::render('Items/History');
 })->middleware(['auth', 'verified'])->name('items.history');
 
-Route::get('/groups', function () {
-    return Inertia::render('Groups');
-})->middleware(['auth', 'verified'])->name('groups');
 
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::get('/profile/password', [ProfileController::class, 'editPassword'])->name('profile.edit-password');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+    Route::get('/groups/{user}', [GroupController::class, 'edit'])->name('groups.edit');
 });
 
 require __DIR__.'/auth.php';

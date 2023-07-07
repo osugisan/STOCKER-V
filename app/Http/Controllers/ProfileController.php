@@ -39,11 +39,9 @@ class ProfileController extends Controller
     public function update(ProfileUpdateRequest $request): RedirectResponse
     {
         $request->user()->fill($request->validated());
-        dd($request->user()->fill());
 
         if ($request->user()->isDirty('avatar_img')) {
             $fileName = $this->saveBoxImg($request->file('avatar_img'));
-            dd($fileName);
             Storage::disk('public')->delete('box_images/', $request->user()->avatar_img);
         }
 

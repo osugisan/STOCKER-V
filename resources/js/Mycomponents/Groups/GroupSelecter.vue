@@ -1,4 +1,38 @@
-<script setup></script>
+<script setup>
+import { useForm } from "@inertiajs/vue3";
+import { computed, onMounted, reactive, ref } from "vue";
+
+const props = defineProps({
+    groups: Array,
+    user: Object,
+});
+
+// onMounted(() => {
+//     groups.forEach(group => {
+//         group.id === props.user.main_group
+//         console.log(group.id === props.user.main_group)
+//     });
+// })
+const groups = reactive(props.groups)
+
+const mainGroup = computed( () => {
+    const main = groups.filter( group => {
+        return group.id === props.user.main_group
+    })
+    return main
+})
+
+const subGroups = computed( () => {
+    const sub = groups.filter( group => {
+        return group.id !== props.user.main_group
+    })
+    return sub
+})
+
+const form = useForm({
+    name: props.user.name,
+})
+</script>
 
 <template>
     <div class="p-2 text-center mx-auto lg:w-2/3">
@@ -8,7 +42,7 @@
             class="w-2/3 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-50 font-medium rounded-lg text-lg px-4 py-2.5 text-center inline-flex items-center shadow-lg"
             type="button"
         >
-            グループ1【メイン】
+            {{ mainGroup[0].name }}
             <svg
                 class="w-4 h-4 ml-auto"
                 aria-hidden="true"
@@ -34,12 +68,12 @@
                 class="py-2 font-medium text-gray-700 dark:text-gray-200"
                 aria-labelledby="dropdownDefaultButton"
             >
-                <li>
-                    <a
-                        href="#"
-                        class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                        >サブグループ</a
+                <li v-for="group in subGroups" :key="group.id">
+                    <button
+                        class="w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
                     >
+                        {{ group.name }}
+                    </button>
                 </li>
                 <li class="border-t">
                     <button

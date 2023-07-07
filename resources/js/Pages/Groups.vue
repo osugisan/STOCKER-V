@@ -15,6 +15,11 @@ onMounted(() => {
     initFlowbite();
 });
 
+const props = defineProps({
+    user: Object,
+    groups: Object,
+})
+
 const returnURL = "profile.edit";
 </script>
 
@@ -26,7 +31,7 @@ const returnURL = "profile.edit";
 
         <section class="text-gray-600 body-font">
             <div class="container md:px-5 py-12 mx-auto">
-                <GroupSelecter />
+                <GroupSelecter :groups="props.groups" :user="props.user" />
 
                 <GroupModal />
 
