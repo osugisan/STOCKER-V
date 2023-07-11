@@ -81,10 +81,10 @@ class GroupController extends Controller
     {
         $user = Auth::user();
 
-        if($group->isDirty('current_group')) {
+        if($request->type === 'select') {
             $user->current_group = $group->id;
         }
-        if($group->isDirty('main_group')) {
+        if($request->type === 'change') {
             $user->main_group = $group->id;
         }
         $user->save();

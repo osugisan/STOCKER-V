@@ -21,7 +21,7 @@ const unselectedGroups = computed(() => {
 });
 
 const changeCurrentGroup = id => {
-    router.patch(route('groups.update', id), {group: id})
+    router.patch(route('groups.update', id), {type: 'select'})
 }
 
 </script>

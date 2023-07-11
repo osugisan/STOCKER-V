@@ -18,7 +18,7 @@ const form = useForm({
 })
 
 const changeMainGroup = id => {
-    router.patch(route('groups.update', id), {group: id})
+    router.patch(route('groups.update', id), {type: 'change'})
 }
 </script>
 
