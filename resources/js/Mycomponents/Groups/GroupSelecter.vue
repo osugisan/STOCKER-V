@@ -1,6 +1,6 @@
 <script setup>
 import { router, useForm } from "@inertiajs/vue3";
-import { computed, onMounted, reactive } from "vue";
+import { computed, onMounted, reactive, watch } from "vue";
 
 onMounted(() => {
 });
@@ -11,7 +11,11 @@ const props = defineProps({
     current_group: Object,
 });
 
-const groups = reactive(props.groups);
+watch(() => props.groups, () => {
+    groups = props.groups
+})
+
+let groups = reactive(props.groups);
 
 const unselectedGroups = computed(() => {
     const unselect = groups.filter((group) => {
@@ -21,6 +25,7 @@ const unselectedGroups = computed(() => {
 });
 
 const changeCurrentGroup = id => {
+    document.getElementById('dropdown').classList.toggle('hidden');
     router.patch(route('groups.update', id), {type: 'select'})
 }
 

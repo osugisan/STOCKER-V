@@ -89,6 +89,11 @@ class GroupController extends Controller
         }
         $user->save();
 
+        if($request->exists('name')) {
+            $group->name = $request->name;
+            $group->save();
+        }
+
         return to_route('groups.edit');
     }
 

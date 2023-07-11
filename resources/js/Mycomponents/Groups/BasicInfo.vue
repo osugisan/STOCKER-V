@@ -20,6 +20,10 @@ const form = useForm({
 const changeMainGroup = id => {
     router.patch(route('groups.update', id), {type: 'change'})
 }
+
+const updateGroup = id  => {
+    form.patch(route('groups.update', id))
+}
 </script>
 
 <template>
@@ -34,6 +38,7 @@ const changeMainGroup = id => {
             <div class="relative z-0">
                 <input
                     v-model="form.name"
+                    @change="updateGroup(props.current_group.id)"
                     type="text"
                     id="floating_standard"
                     class="title-font sm:text-2xl text-xl font-medium text-gray-900 mt-2 px-0 w-full bg-transparent border-b-2 border-transparent border-0 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-gray-400 peer"
