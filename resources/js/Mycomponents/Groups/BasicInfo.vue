@@ -1,6 +1,25 @@
 <script setup>
 import TagList from "@/Mycomponents/TagList.vue";
-import { ref } from "vue";
+import { router, useForm } from "@inertiajs/vue3";
+import { ref, watch } from "vue";
+
+const props = defineProps({
+    group: Object,
+    user: Object,
+    current_group: Object,
+})
+
+watch( () => props.current_group, () => {
+    form.name = props.current_group.name
+})
+
+const form = useForm({
+    name: props.current_group.name,
+})
+
+const changeMainGroup = id => {
+    router.patch(route('groups.update', id), {group: id})
+}
 </script>
 
 <template>
@@ -14,6 +33,7 @@ import { ref } from "vue";
 
             <div class="relative z-0">
                 <input
+                    v-model="form.name"
                     type="text"
                     id="floating_standard"
                     class="title-font sm:text-2xl text-xl font-medium text-gray-900 mt-2 px-0 w-full bg-transparent border-b-2 border-transparent border-0 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-gray-400 peer"
@@ -38,7 +58,11 @@ import { ref } from "vue";
                     </svg>
                 </div>
             </div>
-            <p class="border-b pb-2">グループID</p>
+            <p class="border-b pb-2">
+                グループID：
+                <span class="ml-2">{{ props.current_group.code }}</span>
+            </p>
+
             <button
                 data-modal-target="group-id"
                 data-modal-toggle="group-id"
@@ -65,6 +89,8 @@ import { ref } from "vue";
 
             <div class="flex justify-center pt-4 border-t">
                 <button
+                    v-if="props.user.main_group !== props.current_group.id"
+                    @click="changeMainGroup(props.current_group.id)"
                     type="button"
                     class="text-yellow-400 hover:text-white border border-yellow-400 hover:bg-yellow-500 focus:ring-4 focus:outline-none focus:ring-yellow-300 font-medium rounded-full text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:border-yellow-300 dark:text-yellow-300 dark:hover:text-white dark:hover:bg-yellow-400 dark:focus:ring-yellow-900"
                 >

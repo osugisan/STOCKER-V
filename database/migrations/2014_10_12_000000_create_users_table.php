@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('email')->unique();
             $table->integer('main_group');
+            $table->integer('current_group');
             $table->boolean('large_item')->default(true);
             $table->string('avatar_img')->nullable();
             $table->timestamp('email_verified_at')->nullable();

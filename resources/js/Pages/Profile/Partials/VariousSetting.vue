@@ -13,7 +13,7 @@ const user = usePage().props.auth.user
     <div class="px-4 pt-4">
         <Link 
             as="button"
-            :href="route('groups.edit', {user: user.id})"
+            :href="route('groups.edit')"
             class="block mb-2"
         >
             <svg class="w-6 pb-1 mr-3 inline-flex" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">

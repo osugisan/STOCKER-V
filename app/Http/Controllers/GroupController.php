@@ -62,9 +62,11 @@ class GroupController extends Controller
     public function edit(User $user)
     {
         $user = Auth::user();
+        $current_group = Group::find($user->current_group);
         return Inertia::render('Groups', [
             'user' => Auth::user(),
             'groups' => $user->groups,
+            'current_group' => $current_group,
         ]);
     }
 
@@ -77,7 +79,17 @@ class GroupController extends Controller
      */
     public function update(UpdateGroupRequest $request, Group $group)
     {
-        //
+        $user = Auth::user();
+
+        if($group->isDirty('current_group')) {
+            $user->current_group = $group->id;
+        }
+        if($group->isDirty('main_group')) {
+            $user->main_group = $group->id;
+        }
+        $user->save();
+
+        return to_route('groups.edit');
     }
 
     /**

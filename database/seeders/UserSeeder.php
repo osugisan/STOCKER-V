@@ -22,30 +22,35 @@ class UserSeeder extends Seeder
                 'email' => 'hoge@hoge.com',
                 'password' => Hash::make('hogehoge'),
                 'main_group' => 1,
+                'current_group' => 1,
             ],
             [
                 'name' => 'test',
                 'email' => 'test@test.com',
                 'password' => Hash::make('testtest'),
                 'main_group' => 1,
+                'current_group' => 1,
             ],
             [
                 'name' => 'osugi',
                 'email' => 'osugi@osugi.com',
                 'password' => Hash::make('osugiosugi'),
                 'main_group' => 1,
+                'current_group' => 1,
             ],
             [
                 'name' => 'rin',
                 'email' => 'rin@rin.com',
                 'password' => Hash::make('rinrin'),
                 'main_group' => 1,
+                'current_group' => 1,
             ],
             [
                 'name' => 'miki',
                 'email' => 'miki@miki.com',
                 'password' => Hash::make('mikimiki'),
                 'main_group' => 1,
+                'current_group' => 1,
             ],
         ]);
     }

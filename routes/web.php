@@ -51,7 +51,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-    Route::get('/groups/{user}', [GroupController::class, 'edit'])->name('groups.edit');
+    Route::get('/groups', [GroupController::class, 'edit'])->name('groups.edit');
+    Route::patch('/groups/{group}', [GroupController::class, 'update'])->name('groups.update');
+    Route::put('/groups/{group}', [GroupController::class, 'update'])->name('groups.update');
 });
 
 require __DIR__.'/auth.php';

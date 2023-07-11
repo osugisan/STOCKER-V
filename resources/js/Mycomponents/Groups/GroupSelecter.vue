@@ -1,37 +1,29 @@
 <script setup>
-import { useForm } from "@inertiajs/vue3";
-import { computed, onMounted, reactive, ref } from "vue";
+import { router, useForm } from "@inertiajs/vue3";
+import { computed, onMounted, reactive } from "vue";
+
+onMounted(() => {
+});
 
 const props = defineProps({
     groups: Array,
     user: Object,
+    current_group: Object,
 });
 
-// onMounted(() => {
-//     groups.forEach(group => {
-//         group.id === props.user.main_group
-//         console.log(group.id === props.user.main_group)
-//     });
-// })
-const groups = reactive(props.groups)
+const groups = reactive(props.groups);
 
-const mainGroup = computed( () => {
-    const main = groups.filter( group => {
-        return group.id === props.user.main_group
-    })
-    return main
-})
+const unselectedGroups = computed(() => {
+    const unselect = groups.filter((group) => {
+        return group.id !== props.current_group.id
+    });
+    return unselect
+});
 
-const subGroups = computed( () => {
-    const sub = groups.filter( group => {
-        return group.id !== props.user.main_group
-    })
-    return sub
-})
+const changeCurrentGroup = id => {
+    router.patch(route('groups.update', id), {group: id})
+}
 
-const form = useForm({
-    name: props.user.name,
-})
 </script>
 
 <template>
@@ -42,7 +34,13 @@ const form = useForm({
             class="w-2/3 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-50 font-medium rounded-lg text-lg px-4 py-2.5 text-center inline-flex items-center shadow-lg"
             type="button"
         >
-            {{ mainGroup[0].name }}
+            {{ props.current_group.name }}
+            <p
+                v-if="props.current_group.id === props.user.main_group"
+                class="ml-2"
+            >
+                【メイン】
+            </p>
             <svg
                 class="w-4 h-4 ml-auto"
                 aria-hidden="true"
@@ -68,19 +66,28 @@ const form = useForm({
                 class="py-2 font-medium text-gray-700 dark:text-gray-200"
                 aria-labelledby="dropdownDefaultButton"
             >
-                <li v-for="group in subGroups" :key="group.id">
-                    <button
-                        class="w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                    >
+                <button
+                    v-for="group in unselectedGroups"
+                    :key="group.id"
+                    @click="changeCurrentGroup(group.id)"
+                    class="w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                >
+                    <li class="flex justify-center">
                         {{ group.name }}
-                    </button>
-                </li>
+                        <p
+                            v-if="group.id === props.user.main_group"
+                            class="ml-2"
+                        >
+                            【メイン】
+                        </p>
+                    </li>
+                </button>
                 <li class="border-t">
                     <button
                         data-modal-target="group-modal"
                         data-modal-toggle="group-modal"
                         type="button"
-                        class="px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                        class="w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
                     >
                         グループを追加
                     </button>

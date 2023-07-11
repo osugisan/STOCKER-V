@@ -42,8 +42,9 @@ class DatabaseSeeder extends Seeder
                 ->where('user_id', $user->id)
                 ->get();
 
-            $user->main_group = $groupIds[0]->group_id;
-            $user->save();
+                $user->main_group = $groupIds[0]->group_id;
+                $user->current_group = $groupIds[0]->group_id;
+                $user->save();
         }
         
         Tag::factory(50)->create();

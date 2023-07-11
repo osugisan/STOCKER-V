@@ -9,18 +9,20 @@ import InviteLink from "@/Mycomponents/Groups/InviteLink.vue";
 import { Head, Link } from "@inertiajs/vue3";
 import "flowbite";
 import { initFlowbite } from "flowbite";
-import { onMounted, reactive, ref } from "vue";
+import { onMounted, reactive, ref, watch } from "vue";
 
 onMounted(() => {
     initFlowbite();
 });
 
+const returnURL = "profile.edit";
+
 const props = defineProps({
     user: Object,
     groups: Object,
+    current_group: Object,
 })
 
-const returnURL = "profile.edit";
 </script>
 
 <template>
@@ -31,11 +33,11 @@ const returnURL = "profile.edit";
 
         <section class="text-gray-600 body-font">
             <div class="container md:px-5 py-12 mx-auto">
-                <GroupSelecter :groups="props.groups" :user="props.user" />
+                <GroupSelecter :groups="props.groups" :user="props.user" :current_group="props.current_group" />
 
                 <GroupModal />
 
-                <BasicInfo />
+                <BasicInfo :user="props.user" :current_group="props.current_group" />
 
                 <MemberList />
 
