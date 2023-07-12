@@ -63,10 +63,14 @@ class GroupController extends Controller
     {
         $user = Auth::user();
         $current_group = Group::find($user->current_group);
+
+        $members = $current_group->users;
+
         return Inertia::render('Groups', [
             'user' => Auth::user(),
             'groups' => $user->groups,
             'current_group' => $current_group,
+            'members' => $members,
         ]);
     }
 

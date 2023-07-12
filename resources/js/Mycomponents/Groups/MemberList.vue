@@ -1,4 +1,24 @@
-<script setup></script>
+<script setup>
+import { computed, onMounted } from "vue";
+
+const props = defineProps({
+    members: Array,
+});
+
+const ownerMember = computed(() => {
+    const owner = props.members.filter((member) => {
+        return member.pivot.owner === 1;
+    });
+    return owner;
+});
+
+const normalMembers = computed(() => {
+    const normal = props.members.filter((member) => {
+        return member.pivot.owner === 0;
+    });
+    return normal;
+});
+</script>
 
 <template>
     <div class="p-2 mx-auto lg:w-2/3">
@@ -25,9 +45,13 @@
                         ></path>
                     </svg>
                 </button>
-                <p class="inline-flex">オーナー</p>
+                <p class="inline-flex">{{ ownerMember[0].name }}</p>
             </div>
-            <div class="text-lg p-2">
+            <div
+                v-for="normalMember in normalMembers"
+                :key="normalMember.id"
+                class="text-lg p-2"
+            >
                 <button class="text-red-500">
                     <svg
                         fill="currentColor"
@@ -43,7 +67,7 @@
                         ></path>
                     </svg>
                 </button>
-                <p class="inline-flex">メンバー</p>
+                <p class="inline-flex">{{ normalMember.name }}</p>
             </div>
         </div>
     </div>

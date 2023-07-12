@@ -21,6 +21,7 @@ const props = defineProps({
     user: Object,
     groups: Object,
     current_group: Object,
+    members: Array,
 })
 
 </script>
@@ -39,7 +40,7 @@ const props = defineProps({
 
                 <BasicInfo :user="props.user" :current_group="props.current_group" />
 
-                <MemberList />
+                <MemberList :members="props.members"/>
 
                 <InviteLink />
 
