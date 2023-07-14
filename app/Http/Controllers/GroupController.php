@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreGroupRequest;
 use App\Http\Requests\UpdateGroupRequest;
+use App\Http\Requests\Request;
 use App\Models\Group;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
@@ -83,6 +84,21 @@ class GroupController extends Controller
      */
     public function update(UpdateGroupRequest $request, Group $group)
     {
+        $group->name = $request->name;
+        $group->save();
+
+        return to_route('groups.edit');
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \App\Http\Requests\UpdateGroupRequest  $request
+     * @param  \App\Models\Group  $group
+     * @return \Illuminate\Http\Response
+     */
+    public function userUpdate(Request $request, Group $group)
+    {
         $user = Auth::user();
 
         if($request->type === 'select') {
@@ -92,11 +108,6 @@ class GroupController extends Controller
             $user->main_group = $group->id;
         }
         $user->save();
-
-        if($request->exists('name')) {
-            $group->name = $request->name;
-            $group->save();
-        }
 
         return to_route('groups.edit');
     }

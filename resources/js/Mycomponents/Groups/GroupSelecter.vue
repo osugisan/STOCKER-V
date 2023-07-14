@@ -26,7 +26,7 @@ const unselectedGroups = computed(() => {
 
 const changeCurrentGroup = id => {
     document.getElementById('dropdown').classList.toggle('hidden');
-    router.patch(route('groups.update', id), {type: 'select'})
+    router.put(route('groups.user-update', id), {type: 'select'})
 }
 
 </script>

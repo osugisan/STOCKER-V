@@ -1,5 +1,6 @@
 <script setup>
 import TagList from "@/Mycomponents/TagList.vue";
+import Message from "@/Mycomponents/Message.vue";
 import { router, useForm } from "@inertiajs/vue3";
 import { ref, watch } from "vue";
 
@@ -7,23 +8,26 @@ const props = defineProps({
     group: Object,
     user: Object,
     current_group: Object,
-})
+});
 
-watch( () => props.current_group, () => {
-    form.name = props.current_group.name
-})
+watch(
+    () => props.current_group,
+    () => {
+        form.name = props.current_group.name;
+    }
+);
 
 const form = useForm({
     name: props.current_group.name,
-})
+});
 
-const changeMainGroup = id => {
-    router.patch(route('groups.update', id), {type: 'change'})
-}
+const changeMainGroup = (id) => {
+    router.put(route("groups.user-update", id), { type: "change" });
+};
 
-const updateGroup = id  => {
-    form.patch(route('groups.update', id))
-}
+const updateGroup = (id) => {
+    form.patch(route("groups.update", id));
+};
 </script>
 
 <template>
@@ -63,6 +67,9 @@ const updateGroup = id  => {
                     </svg>
                 </div>
             </div>
+
+            <Message :form="form" />
+
             <p class="border-b pb-2">
                 グループID：
                 <span class="ml-2">{{ props.current_group.code }}</span>
@@ -90,7 +97,11 @@ const updateGroup = id  => {
                 <p class="inline-block font-title font-bold">タグを編集する</p>
             </button>
 
-            <TagList buttonIsActive="true" modalTitle="タグ編集" modalId="group-id" />
+            <TagList
+                buttonIsActive="true"
+                modalTitle="タグ編集"
+                modalId="group-id"
+            />
 
             <div class="flex justify-center pt-4 border-t">
                 <button

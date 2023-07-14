@@ -153,6 +153,11 @@ return [
     |
     */
 
-    'attributes' => [],
+    'attributes' => [
+        'name' => '名前',
+        'avatar_img' => 'アバター画像',
+        'email' => 'メールアドレス',
+        'password' => 'パスワード',
+    ],
 
 ];

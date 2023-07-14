@@ -31,17 +31,17 @@ const props = defineProps({
 
     <AuthenticatedLayout>
         <ReturnButton :returnURL="returnURL" />
-
+        
         <section class="text-gray-600 body-font">
             <div class="container md:px-5 py-12 mx-auto">
                 <GroupSelecter :groups="props.groups" :user="props.user" :current_group="props.current_group" />
-
+                
                 <GroupModal />
 
                 <BasicInfo :user="props.user" :current_group="props.current_group" />
 
                 <MemberList :members="props.members"/>
-
+                
                 <InviteLink />
 
                 <div class="p-2 mx-auto lg:w-2/3">
