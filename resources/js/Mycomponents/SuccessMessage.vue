@@ -1,11 +1,12 @@
 <script setup>
 defineProps({
     form: Object,
+    message: String,
 });
 </script>
 
 <template>
-    <div class="fixed z-40 top-3 h-12 max-w-sm rounded-lg bottom-4 right-0">
+    <div class="fixed z-40 top-3 h-6 max-w-sm rounded-lg bottom-4 right-0">
         <Transition
             enter-from-class="opacity-0"
             leave-to-class="opacity-0"
@@ -13,7 +14,7 @@ defineProps({
         >
             <div
                 v-show="form.recentlySuccessful"
-                class="flex items-center p-4 mb-4 text-sm text-green-800 border border-green-300 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400 dark:border-green-800"
+                class="flex items-center p-3 mb-4 text-sm text-green-800 border border-green-300 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400 dark:border-green-800"
                 role="alert"
             >
                 <svg
@@ -32,7 +33,7 @@ defineProps({
                     />
                 </svg>
                 <div>
-                    <span class="font-medium">登録しました</span>
+                    <span class="font-medium">{{ message }}</span>
                 </div>
             </div>
         </Transition>
