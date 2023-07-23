@@ -40,7 +40,7 @@ const props = defineProps({
 
                 <BasicInfo :user="props.user" :current_group="props.current_group" />
 
-                <MemberList :members="props.members"/>
+                <MemberList :members="props.members" :current_group="props.current_group" />
                 
                 <InviteLink />
 

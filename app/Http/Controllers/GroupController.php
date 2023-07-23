@@ -87,6 +87,8 @@ class GroupController extends Controller
         $group->name = $request->name;
         $group->save();
 
+        dd($group->users()->sync([2,4,5]));
+
         return to_route('groups.edit');
     }
 
@@ -108,6 +110,26 @@ class GroupController extends Controller
             $user->main_group = $group->id;
         }
         $user->save();
+
+        return to_route('groups.edit');
+    }
+
+    public function fire(Request $request, User $user)
+    {
+        // foreach ($group->users() as $user) {
+        //     dd($user);
+        // }
+        // dd($request->groupId);
+        $group = Group::find($request->group);
+        $oldMembers = $group->users->toArray();
+        $oldMemberIds = array_column($oldMembers, 'id');
+        
+        $newMemberIds = array_filter($oldMemberIds, function($memberId) use ($user) {
+            return $memberId !== $user->id;
+        });
+        // dd($newMemberIds);
+
+        $group->users()->sync($newMemberIds);
 
         return to_route('groups.edit');
     }
