@@ -7,33 +7,23 @@ const props = defineProps({
     current_group: Object,
 });
 
-watch( () => props.members,() => {
-    members =[]
-    members.push(props.members)
-    console.log('watch', members)
-})
-
-let members = reactive(props.members)
-
 const ownerMember = computed(() => {
-    console.log('computed', members)
-    const owner = members.filter((member) => {
+    const owner = props.members.filter((member) => {
         return member.pivot.owner === 1;
     });
     return owner;
 });
 
 const normalMembers = computed(() => {
-    const normal = members.filter((member) => {
+    const normal = props.members.filter((member) => {
         return member.pivot.owner === 0;
     });
     return normal;
 });
 
 const fireMember = (userId, groupId) => {
-    console.log(userId, groupId)
     router.post(route("groups.fire", userId), {
-    group: groupId,
+        group: groupId,
     });
 };
 </script>

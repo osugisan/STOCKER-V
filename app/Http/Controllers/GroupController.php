@@ -116,10 +116,6 @@ class GroupController extends Controller
 
     public function fire(Request $request, User $user)
     {
-        // foreach ($group->users() as $user) {
-        //     dd($user);
-        // }
-        // dd($request->groupId);
         $group = Group::find($request->group);
         $oldMembers = $group->users->toArray();
         $oldMemberIds = array_column($oldMembers, 'id');
@@ -127,7 +123,6 @@ class GroupController extends Controller
         $newMemberIds = array_filter($oldMemberIds, function($memberId) use ($user) {
             return $memberId !== $user->id;
         });
-        // dd($newMemberIds);
 
         $group->users()->sync($newMemberIds);
 
