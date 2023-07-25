@@ -5,6 +5,7 @@ import { computed, reactive, watch } from "vue";
 const props = defineProps({
     members: Array,
     current_group: Object,
+    user: Object,
 });
 
 const ownerMember = computed(() => {
@@ -66,6 +67,7 @@ const fireMember = (userId, groupId) => {
             >
                 <button
                     @click="fireMember(normalMember.id, props.current_group.id)"
+                    v-show="ownerMember[0].id === props.user.id"
                     class="text-red-500"
                 >
                     <svg
@@ -82,6 +84,25 @@ const fireMember = (userId, groupId) => {
                         ></path>
                     </svg>
                 </button>
+
+                <div
+                    v-show="ownerMember[0].id !== props.user.id"
+                    class="text-gray-500 inline-block"
+                >
+                    <svg
+                        fill="currentColor"
+                        viewBox="0 0 20 20"
+                        xmlns="http://www.w3.org/2000/svg"
+                        aria-hidden="true"
+                        class="w-6 inline-flex mr-2 pb-1"
+                    >
+                        <path
+                            clip-rule="evenodd"
+                            fill-rule="evenodd"
+                            d="M10 18a8 8 0 100-16 8 8 0 000 16zM6.75 9.25a.75.75 0 000 1.5h6.5a.75.75 0 000-1.5h-6.5z"
+                        ></path>
+                    </svg>
+                </div>
                 <p class="inline-flex">{{ normalMember.name }}</p>
             </div>
         </div>
