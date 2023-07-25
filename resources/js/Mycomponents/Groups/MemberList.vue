@@ -22,8 +22,12 @@ const normalMembers = computed(() => {
 });
 
 const fireMember = (userId, groupId) => {
-    router.post(route("groups.fire", userId), {
+    router.post(route("groups.fire", userId,), 
+    {
         group: groupId,
+    },
+    {
+        onBefore: () => confirm('退出させてよろしいでしょうか？')
     });
 };
 </script>
