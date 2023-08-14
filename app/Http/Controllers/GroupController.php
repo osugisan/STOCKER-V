@@ -6,6 +6,7 @@ use App\Http\Requests\StoreGroupRequest;
 use App\Http\Requests\UpdateGroupRequest;
 use App\Http\Requests\Request;
 use App\Models\Group;
+use App\Models\Tag;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
@@ -40,7 +41,24 @@ class GroupController extends Controller
      */
     public function store(StoreGroupRequest $request)
     {
-        //
+        $user = Auth::user();
+        $code = uniqid();
+
+        $group = Group::create([
+            'name' => $request->name,
+            'code' => $code,
+        ]);
+
+        if ($request->main_group) {
+            $user->main_group = $group->id;
+        }
+        $user->current_group = $group->id;
+        $user->save();
+
+        $group->users()->attach($user->id, [ 'owner' => true ]);
+
+
+        return to_route('groups.edit');
     }
 
     /**
@@ -67,11 +85,14 @@ class GroupController extends Controller
 
         $members = $current_group->users;
 
+        $tags = Tag::select('id', 'name', 'color', 'group_id')->get();
+
         return Inertia::render('Groups', [
             'user' => Auth::user(),
             'groups' => $user->groups,
             'current_group' => $current_group,
             'members' => $members,
+            'tags' => $tags,
         ]);
     }
 
@@ -86,8 +107,6 @@ class GroupController extends Controller
     {
         $group->name = $request->name;
         $group->save();
-
-        dd($group->users()->sync([2,4,5]));
 
         return to_route('groups.edit');
     }

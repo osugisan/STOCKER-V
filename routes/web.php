@@ -55,6 +55,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::patch('/groups/{group}', [GroupController::class, 'update'])->name('groups.update');
     Route::put('/groups/{group}', [GroupController::class, 'userUpdate'])->name('groups.user-update');
     Route::post('/groups/{user}/fire', [GroupController::class, 'fire'])->name('groups.fire');
+    Route::post('/groups', [GroupController::class, 'store'])->name('groups.store');
 });
 
 require __DIR__.'/auth.php';

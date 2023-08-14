@@ -2,6 +2,7 @@
 import TagList from "@/Mycomponents/TagList.vue";
 import SuccessMessage from "@/Mycomponents/SuccessMessage.vue";
 import InputIcon from "@/Mycomponents/InputIcon.vue";
+import InputError from "@/Components/InputError.vue";
 import { router, useForm } from "@inertiajs/vue3";
 import { reactive, watch } from "vue";
 
@@ -65,6 +66,7 @@ const updateGroup = (id) => {
                 <InputIcon :changed="changed.name" />
             </div>
 
+            <InputError class="mt-2" :message="form.errors.name" />
             <SuccessMessage :form="form" :message="message" />
 
             <p class="border-b pb-2">

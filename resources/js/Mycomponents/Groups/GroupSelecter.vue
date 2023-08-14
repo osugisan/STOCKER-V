@@ -1,14 +1,13 @@
 <script setup>
-import { router, useForm } from "@inertiajs/vue3";
-import { computed, onMounted, reactive, watch } from "vue";
-
-onMounted(() => {
-});
+import GroupModal from "@/Mycomponents/Groups/GroupModal.vue";
+import { router } from "@inertiajs/vue3";
+import { computed, reactive, ref, watch } from "vue";
 
 const props = defineProps({
     groups: Array,
     user: Object,
     current_group: Object,
+    tags: Object,
 });
 
 watch(() => props.groups, () => {
@@ -28,6 +27,12 @@ const changeCurrentGroup = id => {
     document.getElementById('dropdown').classList.toggle('hidden');
     router.put(route('groups.user-update', id), {type: 'select'})
 }
+
+const groupModal = ref()
+
+const onChildMethodClick = () => {
+    groupModal.value.formReset()
+};
 
 </script>
 
@@ -92,6 +97,7 @@ const changeCurrentGroup = id => {
                         data-modal-target="group-modal"
                         data-modal-toggle="group-modal"
                         type="button"
+                        @click="onChildMethodClick"
                         class="w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
                     >
                         グループを追加
@@ -100,4 +106,6 @@ const changeCurrentGroup = id => {
             </ul>
         </div>
     </div>
+
+    <GroupModal ref="groupModal" />
 </template>

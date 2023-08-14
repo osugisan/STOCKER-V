@@ -2,7 +2,6 @@
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import ReturnButton from "@/Mycomponents/ReturnButton.vue";
 import GroupSelecter from "@/Mycomponents/Groups/GroupSelecter.vue";
-import GroupModal from "@/Mycomponents/Groups/GroupModal.vue";
 import BasicInfo from "@/Mycomponents/Groups/BasicInfo.vue";
 import MemberList from "@/Mycomponents/Groups/MemberList.vue";
 import InviteLink from "@/Mycomponents/Groups/InviteLink.vue";
@@ -22,6 +21,7 @@ const props = defineProps({
     groups: Object,
     current_group: Object,
     members: Array,
+    tags: Object,
 })
 
 </script>
@@ -34,10 +34,8 @@ const props = defineProps({
         
         <section class="text-gray-600 body-font">
             <div class="container md:px-5 py-12 mx-auto">
-                <GroupSelecter :groups="props.groups" :user="props.user" :current_group="props.current_group" />
+                <GroupSelecter :groups="props.groups" :user="props.user" :current_group="props.current_group" :tags="props.tags" />
                 
-                <GroupModal />
-
                 <BasicInfo :user="props.user" :current_group="props.current_group" />
 
                 <MemberList :members="props.members" :current_group="props.current_group" :user="props.user" />
