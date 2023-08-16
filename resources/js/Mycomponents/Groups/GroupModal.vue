@@ -2,6 +2,15 @@
 import SuccessMessage from "@/Mycomponents/SuccessMessage.vue";
 import InputError from "@/Components/InputError.vue";
 import { useForm } from "@inertiajs/vue3";
+import { Modal } from "flowbite";
+
+const $targetEl = document.getElementById("group-modal");
+
+const modal = new Modal($targetEl);
+
+const testClick = () => {
+    modal.toggle();
+};
 
 const message = "登録しました";
 
@@ -11,12 +20,16 @@ const form = useForm({
 });
 
 const storeGroup = () => {
-    form.post(route("groups.store"));
+    form.post(route("groups.store"), {
+        onSuccess: () => {
+            form.reset();
+        },
+    });
 };
 
 const formReset = () => {
-    form.reset()
-}
+    form.reset();
+};
 
 defineExpose({
     formReset,
@@ -84,11 +97,6 @@ defineExpose({
                                             class="mt-2"
                                             :message="form.errors.name"
                                         />
-
-                                        <SuccessMessage
-                                            :form="form"
-                                            :message="message"
-                                        />
                                     </div>
                                     <div
                                         class="flex items-center rounded hover:bg-gray-100 dark:hover:bg-gray-600"
@@ -131,4 +139,6 @@ defineExpose({
             </div>
         </div>
     </div>
+
+    <SuccessMessage :form="form" :message="message" />
 </template>

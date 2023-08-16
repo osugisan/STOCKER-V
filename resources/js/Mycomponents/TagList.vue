@@ -1,35 +1,54 @@
 <script setup>
-import { Link } from "@inertiajs/vue3";
+import { Link, useForm } from "@inertiajs/vue3";
 import { reactive } from "vue";
 
-defineProps({
+const props = defineProps({
     modalTitle: String,
     iconIsActive: Boolean,
     buttonIsActive: Boolean,
     inputIsActive: Boolean,
     modalId: String,
+    tags: Array,
 });
 
 const temp = reactive({
+    bg_color: "gray-200",
+    text_color: "gray-600",
+});
+
+const setTempTag = (bg_color, text_color) => {
+    temp.bg_color = bg_color;
+    temp.text_color = text_color;
+};
+
+const tempToForm = () => {
+    form.bg_color = temp.bg_color
+    form.text_color = temp.text_color
+}
+
+const resetColor = () => {
+    temp.bg_color = "gray-200";
+    temp.text_color = "gray-600";
+};
+
+const setTagForm = (tag) => {
+    form.name = tag.name;
+    form.bg_color = tag.bg_color;
+    form.text_color = tag.text_color;
+};
+
+const form = useForm({
+    name: "",
     bg_color: "",
     text_color: "",
 });
-
-const setTextColor = (color) => {
-    temp.text_color = color;
-};
-
-const resetColor = () => {
-    temp.bg_color = "";
-    temp.text_color = "";
-};
 </script>
 
 <template>
     <button
-        v-show="iconIsActive"
-        :data-modal-target="modalId"
-        :data-modal-toggle="modalId"
+        v-show="props.iconIsActive"
+        :data-modal-target="props.modalId"
+        :data-modal-toggle="props.modalId"
         type="button"
     >
         <svg
@@ -48,9 +67,9 @@ const resetColor = () => {
         </svg>
     </button>
 
-    <!-- タグ選択 -->
+    <!-- タグ一覧 -->
     <div
-        :id="modalId"
+        :id="props.modalId"
         tabindex="-1"
         class="fixed z-50 top-0 left-0 right-0 hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full"
     >
@@ -64,8 +83,10 @@ const resetColor = () => {
                     <h3
                         class="text-xl font-medium text-gray-900 dark:text-white"
                     >
-                        {{ modalTitle }}
+                        {{ props.modalTitle }}
                     </h3>
+
+                    <!-- タグ新規登録ボタン -->
                     <button
                         data-modal-target="tag-edit"
                         data-modal-toggle="tag-edit"
@@ -84,16 +105,19 @@ const resetColor = () => {
                             ></path>
                         </svg>
                     </button>
+                    <!-- タグ新規登録ボタン -->
                 </div>
-                <!-- Modal body -->
+
+                <!-- タグ一覧 -->
                 <ul
                     class="h-48 px-1 pb-1 overflow-y-auto text-sm text-gray-700 dark:text-gray-200"
                     aria-labelledby="dropdownSearchButton"
                 >
-                    <li>
+                    <li v-for="tag in tags" :key="tag.id">
                         <div
                             class="grid grid-cols-12 pl-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600"
                         >
+                            <!-- タグ削除ボタン -->
                             <button class="col-span-1 w-7 text-red-500">
                                 <svg
                                     fill="currentColor"
@@ -108,31 +132,34 @@ const resetColor = () => {
                                     ></path>
                                 </svg>
                             </button>
-                            <span
-                                class="col-span-1 my-2 w-5 ml-auto bg-red-500 rounded-full"
-                            ></span>
 
-                            <!-- グループ設定 -->
+                            <span
+                                :class="`bg-${tag.bg_color}`"
+                                class="col-span-1 my-2 w-5 ml-auto rounded-full"
+                            ></span>
+                            <!-- タグアイテム -->
                             <button
-                                v-show="buttonIsActive"
+                                v-show="props.buttonIsActive"
+                                @click="setTagForm(tag)"
                                 data-modal-target="tag-edit"
                                 data-modal-toggle="tag-edit"
                                 type="button"
                                 for="checkbox-item-11"
                                 class="col-start-4 col-span-7 text-left w-full mr-auto py-2 text-lg font-bold text-gray-900 rounded dark:text-gray-300"
                             >
-                                タグ１
+                                {{ tag.name }}
                             </button>
 
                             <!-- アイテム設定 -->
                             <label
-                                v-show="inputIsActive"
+                                v-show="props.inputIsActive"
                                 for="checkbox-item-11"
                                 class="col-start-4 col-span-7 w-full py-2 text-lg sm:text-lg font-bold text-gray-900 rounded dark:text-gray-300"
-                                >タグ１</label
                             >
+                                {{ tag.name }}
+                            </label>
                             <input
-                                v-show="inputIsActive"
+                                v-show="props.inputIsActive"
                                 id="checkbox-item-11"
                                 type="checkbox"
                                 value=""
@@ -146,14 +173,14 @@ const resetColor = () => {
                     class="flex items-center justify-end px-6 pb-6 left-0 space-x-2 rounded-b dark:border-gray-600"
                 >
                     <button
-                        :data-modal-hide="modalId"
+                        :data-modal-hide="props.modalId"
                         type="button"
                         class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                     >
                         決定
                     </button>
                     <button
-                        :data-modal-hide="modalId"
+                        :data-modal-hide="props.modalId"
                         type="button"
                         class="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600"
                     >
@@ -180,7 +207,7 @@ const resetColor = () => {
                     <h3
                         class="text-xl font-medium text-gray-900 dark:text-white"
                     >
-                        タグ追加
+                        タグ新規登録
                     </h3>
                     <button
                         type="button"
@@ -213,42 +240,33 @@ const resetColor = () => {
                             <div class="block w-full px-4 py-2 text-gray-800">
                                 <div class="relative z-0 mt-1 mb-3">
                                     <label for="tag_name" class="text-lg"
-                                        >メモ</label
+                                        >タグ名</label
                                     >
                                     <input
+                                        v-model="form.name"
                                         type="text"
                                         id="tag_name"
                                         class="text-lg text-gray-900 px-0 w-full bg-transparent border-b-2 border-gray-400 border-0 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-gray-400 peer"
-                                        placeholder="〇〇店で購入..."
+                                        placeholder="タグ名を入力"
                                     />
-                                    <div
-                                        class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none"
-                                    >
-                                        <svg
-                                            class="w-4 h-4 text-gray-600 dark:text-gray-400"
-                                            fill="currentColor"
-                                            viewBox="0 0 20 20"
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            aria-hidden="true"
-                                        >
-                                            <path
-                                                d="M5.433 13.917l1.262-3.155A4 4 0 017.58 9.42l6.92-6.918a2.121 2.121 0 013 3l-6.92 6.918c-.383.383-.84.685-1.343.886l-3.154 1.262a.5.5 0 01-.65-.65z"
-                                            ></path>
-                                            <path
-                                                d="M3.5 5.75c0-.69.56-1.25 1.25-1.25H10A.75.75 0 0010 3H4.75A2.75 2.75 0 002 5.75v9.5A2.75 2.75 0 004.75 18h9.5A2.75 2.75 0 0017 15.25V10a.75.75 0 00-1.5 0v5.25c0 .69-.56 1.25-1.25 1.25h-9.5c-.69 0-1.25-.56-1.25-1.25v-9.5z"
-                                            ></path>
-                                        </svg>
-                                    </div>
                                 </div>
                                 <p class="text-lg">背景色</p>
                                 <button
                                     data-modal-target="color-edit"
                                     data-modal-toggle="color-edit"
-                                    :class="`bg-${temp.bg_color}`"
+                                    :class="`bg-${
+                                        form.bg_color
+                                            ? form.bg_color
+                                            : temp.bg_color
+                                    }`"
                                     class="block mx-auto my-3 py-auto w-2/3 sm:w-2/5 p-1 bg-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700"
                                 >
                                     <h5
-                                        :class="`text-${temp.text_color}`"
+                                        :class="`text-${
+                                            form.text_color
+                                                ? form.text_color
+                                                : temp.text_color
+                                        }`"
                                         class="mx-auto text-lg text-center font-bold tracking-tight text-gray-600 dark:text-white"
                                     >
                                         色を選択
@@ -308,8 +326,7 @@ const resetColor = () => {
                                     id="color-1"
                                     type="radio"
                                     value="gray-200"
-                                    v-model="temp.bg_color"
-                                    @click="setTextColor('gray-600')"
+                                    @click="setTempTag('gray-200', 'gray-600')"
                                     class="hidden"
                                 />
                                 <label
@@ -352,8 +369,7 @@ const resetColor = () => {
                                     id="color-2"
                                     type="radio"
                                     value="gray-700"
-                                    v-model="temp.bg_color"
-                                    @click="setTextColor('white')"
+                                    @click="setTempTag('gray-700', 'white')"
                                     class="hidden"
                                 />
                                 <label
@@ -397,8 +413,7 @@ const resetColor = () => {
                                     id="color-3"
                                     type="radio"
                                     value="red-500"
-                                    v-model="temp.bg_color"
-                                    @click="setTextColor('white')"
+                                    @click="setTempTag('red-500', 'white')"
                                     class="hidden"
                                 />
                                 <label
@@ -442,8 +457,9 @@ const resetColor = () => {
                                     id="color-4"
                                     type="radio"
                                     value="yellow-200"
-                                    v-model="temp.bg_color"
-                                    @click="setTextColor('gray-600')"
+                                    @click="
+                                        setTempTag('yellow-200', 'gray-600')
+                                    "
                                     class="hidden"
                                 />
                                 <label
@@ -489,8 +505,7 @@ const resetColor = () => {
                                     id="color-5"
                                     type="radio"
                                     value="yellow-800"
-                                    v-model="temp.bg_color"
-                                    @click="setTextColor('white')"
+                                    @click="setTempTag('yellow-800', 'white')"
                                     class="hidden"
                                 />
                                 <label
@@ -534,8 +549,7 @@ const resetColor = () => {
                                     id="color-6"
                                     type="radio"
                                     value="green-300"
-                                    v-model="temp.bg_color"
-                                    @click="setTextColor('gray-600')"
+                                    @click="setTempTag('green-300', 'gray-600')"
                                     class="hidden"
                                 />
                                 <label
@@ -578,8 +592,7 @@ const resetColor = () => {
                                     id="color-7"
                                     type="radio"
                                     value="green-600"
-                                    v-model="temp.bg_color"
-                                    @click="setTextColor('white')"
+                                    @click="setTempTag('green-600', 'white')"
                                     class="hidden"
                                 />
                                 <label
@@ -623,8 +636,7 @@ const resetColor = () => {
                                     id="color-8"
                                     type="radio"
                                     value="blue-400"
-                                    v-model="temp.bg_color"
-                                    @click="setTextColor('white')"
+                                    @click="setTempTag('blue-400', 'white')"
                                     class="hidden"
                                 />
                                 <label
@@ -671,8 +683,7 @@ const resetColor = () => {
                                     id="color-9"
                                     type="radio"
                                     value="indigo-600"
-                                    v-model="temp.bg_color"
-                                    @click="setTextColor('white')"
+                                    @click="setTempTag('indigo-600', 'white')"
                                     class="hidden"
                                 />
                                 <label
@@ -716,8 +727,9 @@ const resetColor = () => {
                                     id="color-10"
                                     type="radio"
                                     value="purple-400"
-                                    v-model="temp.bg_color"
-                                    @click="setTextColor('gray-600')"
+                                    @click="
+                                        setTempTag('purple-400', 'gray-600')
+                                    "
                                     class="hidden"
                                 />
                                 <label
@@ -760,8 +772,7 @@ const resetColor = () => {
                                     id="color-11"
                                     type="radio"
                                     value="pink-300"
-                                    v-model="temp.bg_color"
-                                    @click="setTextColor('gray-600')"
+                                    @click="setTempTag('pink-300', 'gray-600')"
                                     class="hidden"
                                 />
                                 <label
@@ -804,8 +815,7 @@ const resetColor = () => {
                                     id="color-12"
                                     type="radio"
                                     value="pink-600"
-                                    v-model="temp.bg_color"
-                                    @click="setTextColor('white')"
+                                    @click="setTempTag('pink-600', 'white')"
                                     class="hidden"
                                 />
                                 <label
@@ -850,6 +860,7 @@ const resetColor = () => {
                             class="flex items-center justify-end py-5 left-0 space-x-2 rounded-b dark:border-gray-600"
                         >
                             <button
+                                @click="tempToForm()"
                                 data-modal-hide="color-edit"
                                 type="button"
                                 class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"

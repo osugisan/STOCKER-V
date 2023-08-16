@@ -85,7 +85,7 @@ class GroupController extends Controller
 
         $members = $current_group->users;
 
-        $tags = Tag::select('id', 'name', 'color', 'group_id')->get();
+        $tags = Tag::select('id', 'name', 'bg_color', 'text_color', 'group_id')->where('group_id', $current_group->id)->get();
 
         return Inertia::render('Groups', [
             'user' => Auth::user(),

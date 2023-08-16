@@ -21,7 +21,7 @@ const props = defineProps({
     groups: Object,
     current_group: Object,
     members: Array,
-    tags: Object,
+    tags: Array,
 })
 
 </script>
@@ -36,7 +36,7 @@ const props = defineProps({
             <div class="container md:px-5 py-12 mx-auto">
                 <GroupSelecter :groups="props.groups" :user="props.user" :current_group="props.current_group" :tags="props.tags" />
                 
-                <BasicInfo :user="props.user" :current_group="props.current_group" />
+                <BasicInfo :user="props.user" :current_group="props.current_group" :tags="props.tags" />
 
                 <MemberList :members="props.members" :current_group="props.current_group" :user="props.user" />
                 

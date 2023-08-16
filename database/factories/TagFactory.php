@@ -17,7 +17,7 @@ class TagFactory extends Factory
      */
     public function definition()
     {
-        $colors = [
+        $bg_colors = [
             'gray-200',
             'gray-700',
             'red-500',
@@ -31,14 +31,36 @@ class TagFactory extends Factory
             'pink-300',
             'pink-600'
         ];
-        $color = $colors[rand(0, 11)];
-
+        
+        $bg_color = $bg_colors[rand(0, 11)];
+        $text_color = $this->setTextColor($bg_color);
+        
         $groupId = rand(1, 10);
-
+        
         return [
             'name' => $this->faker->word,
-            'color' => $color,
+            'bg_color' => $bg_color,
+            'text_color' => $text_color,
             'group_id' => $groupId,
         ];
+    }
+
+    public function setTextColor($bg_color) {
+        switch($bg_color) {
+            case 'gray-200':
+            case 'yellow-200':
+            case 'green-300':
+            case 'purple-400':
+            case 'pink-300':
+                return 'gray-600';
+            case 'gray-700':
+            case 'red-500':
+            case 'yellow-800':
+            case 'green-600':
+            case 'blue-400':
+            case 'indigo-600':
+            case 'pink-600':
+                return 'white';
+        }
     }
 }

@@ -30,7 +30,7 @@ const changeCurrentGroup = id => {
 
 const groupModal = ref()
 
-const onChildMethodClick = () => {
+const formResetClick = () => {
     groupModal.value.formReset()
 };
 
@@ -97,7 +97,7 @@ const onChildMethodClick = () => {
                         data-modal-target="group-modal"
                         data-modal-toggle="group-modal"
                         type="button"
-                        @click="onChildMethodClick"
+                        @click="formResetClick"
                         class="w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
                     >
                         グループを追加

@@ -17,7 +17,8 @@ return new class extends Migration
             $table->id();
             $table->foreignId('group_id')->constrained()->onDelete('cascade');
             $table->string('name');
-            $table->string('color');
+            $table->string('bg_color');
+            $table->string('text_color');
             $table->timestamps();
         });
     }

@@ -10,6 +10,7 @@ const props = defineProps({
     group: Object,
     user: Object,
     current_group: Object,
+    tags: Array,
 });
 
 const message = '更新しました'
@@ -100,6 +101,7 @@ const updateGroup = (id) => {
                 buttonIsActive="true"
                 modalTitle="タグ編集"
                 modalId="group-id"
+                :tags="props.tags"
             />
 
             <div class="flex justify-center pt-4 border-t">
