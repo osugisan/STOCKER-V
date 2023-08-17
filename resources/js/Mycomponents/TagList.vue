@@ -22,9 +22,9 @@ const setTempTag = (bg_color, text_color) => {
 };
 
 const tempToForm = () => {
-    form.bg_color = temp.bg_color
-    form.text_color = temp.text_color
-}
+    form.bg_color = temp.bg_color;
+    form.text_color = temp.text_color;
+};
 
 const resetColor = () => {
     temp.bg_color = "gray-200";
@@ -32,16 +32,28 @@ const resetColor = () => {
 };
 
 const setTagForm = (tag) => {
+    form.id = tag.id;
     form.name = tag.name;
     form.bg_color = tag.bg_color;
     form.text_color = tag.text_color;
 };
 
 const form = useForm({
+    id: "",
     name: "",
     bg_color: "",
     text_color: "",
 });
+
+const updateTag = (id) => {
+    form.patch(route("tags.update", id));
+};
+
+const deleteTag = (id) => {
+    router.delete(route('tags.destroy', id), {
+        onBefore: () => confirm('このタグを削除しますか？')
+    })
+}
 </script>
 
 <template>
@@ -118,7 +130,10 @@ const form = useForm({
                             class="grid grid-cols-12 pl-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600"
                         >
                             <!-- タグ削除ボタン -->
-                            <button class="col-span-1 w-7 text-red-500">
+                            <button
+                                @click="deleteTag(tag.id)"
+                                class="col-span-1 w-7 text-red-500"
+                            >
                                 <svg
                                     fill="currentColor"
                                     viewBox="0 0 20 20"
@@ -207,7 +222,7 @@ const form = useForm({
                     <h3
                         class="text-xl font-medium text-gray-900 dark:text-white"
                     >
-                        タグ新規登録
+                        タグ編集
                     </h3>
                     <button
                         type="button"
@@ -238,58 +253,60 @@ const form = useForm({
                     >
                         <li>
                             <div class="block w-full px-4 py-2 text-gray-800">
-                                <div class="relative z-0 mt-1 mb-3">
-                                    <label for="tag_name" class="text-lg"
-                                        >タグ名</label
-                                    >
-                                    <input
-                                        v-model="form.name"
-                                        type="text"
-                                        id="tag_name"
-                                        class="text-lg text-gray-900 px-0 w-full bg-transparent border-b-2 border-gray-400 border-0 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-gray-400 peer"
-                                        placeholder="タグ名を入力"
-                                    />
-                                </div>
-                                <p class="text-lg">背景色</p>
-                                <button
-                                    data-modal-target="color-edit"
-                                    data-modal-toggle="color-edit"
-                                    :class="`bg-${
-                                        form.bg_color
-                                            ? form.bg_color
-                                            : temp.bg_color
-                                    }`"
-                                    class="block mx-auto my-3 py-auto w-2/3 sm:w-2/5 p-1 bg-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700"
-                                >
-                                    <h5
-                                        :class="`text-${
-                                            form.text_color
-                                                ? form.text_color
-                                                : temp.text_color
+                                <form @submit.prevent="updateTag(form.id)">
+                                    <div class="relative z-0 mt-1 mb-3">
+                                        <label for="tag_name" class="text-lg"
+                                            >タグ名</label
+                                        >
+                                        <input
+                                            v-model="form.name"
+                                            type="text"
+                                            id="tag_name"
+                                            class="text-lg text-gray-900 px-0 w-full bg-transparent border-b-2 border-gray-400 border-0 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-gray-400 peer"
+                                            placeholder="タグ名を入力"
+                                        />
+                                    </div>
+                                    <p class="text-lg">背景色</p>
+                                    <button
+                                        data-modal-target="color-edit"
+                                        data-modal-toggle="color-edit"
+                                        :class="`bg-${
+                                            form.bg_color
+                                                ? form.bg_color
+                                                : temp.bg_color
                                         }`"
-                                        class="mx-auto text-lg text-center font-bold tracking-tight text-gray-600 dark:text-white"
+                                        class="block mx-auto my-3 py-auto w-2/3 sm:w-2/5 p-1 bg-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700"
                                     >
-                                        色を選択
-                                    </h5>
-                                </button>
-                                <div
-                                    class="flex items-center justify-end px-6 pb-6 left-0 space-x-2 rounded-b dark:border-gray-600"
-                                >
-                                    <button
-                                        data-modal-hide="tag-edit"
-                                        type="button"
-                                        class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                                    >
-                                        決定
+                                        <h5
+                                            :class="`text-${
+                                                form.text_color
+                                                    ? form.text_color
+                                                    : temp.text_color
+                                            }`"
+                                            class="mx-auto text-lg text-center font-bold tracking-tight text-gray-600 dark:text-white"
+                                        >
+                                            色を選択
+                                        </h5>
                                     </button>
-                                    <button
-                                        data-modal-hide="tag-edit"
-                                        type="button"
-                                        class="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600"
+                                    <div
+                                        class="flex items-center justify-end px-6 pb-6 left-0 space-x-2 rounded-b dark:border-gray-600"
                                     >
-                                        キャンセル
-                                    </button>
-                                </div>
+                                        <button
+                                            data-modal-hide="tag-edit"
+                                            type="submit"
+                                            class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                                        >
+                                            決定
+                                        </button>
+                                        <button
+                                            data-modal-hide="tag-edit"
+                                            type="button"
+                                            class="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600"
+                                        >
+                                            キャンセル
+                                        </button>
+                                    </div>
+                                </form>
                             </div>
                         </li>
                     </ul>

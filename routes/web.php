@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\GroupController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\TagController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -56,6 +57,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::put('/groups/{group}', [GroupController::class, 'userUpdate'])->name('groups.user-update');
     Route::post('/groups/{user}/fire', [GroupController::class, 'fire'])->name('groups.fire');
     Route::post('/groups', [GroupController::class, 'store'])->name('groups.store');
+
+    Route::post('/tags', [TagController::class, 'store'])->name('tags.store');
+    Route::patch('/tags/{tag}', [TagController::class, 'update'])->name('tags.update');
+    Route::delete('/tags/{tag}', [TagController::class, 'destroy'])->name('tags.destroy');
 });
 
 require __DIR__.'/auth.php';

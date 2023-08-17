@@ -70,7 +70,12 @@ class TagController extends Controller
      */
     public function update(UpdateTagRequest $request, Tag $tag)
     {
-        //
+        $tag->name = $request->name;
+        $tag->bg_color = $request->bg_color;
+        $tag->text_color = $request->text_color;
+        $tag->save();
+
+        return to_route('groups.edit');
     }
 
     /**
