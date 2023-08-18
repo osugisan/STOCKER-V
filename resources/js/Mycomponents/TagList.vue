@@ -9,6 +9,7 @@ const props = defineProps({
     inputIsActive: Boolean,
     modalId: String,
     tags: Array,
+    current_group: Object,
 });
 
 const temp = reactive({
@@ -24,6 +25,8 @@ const setTempTag = (bg_color, text_color) => {
 const tempToForm = () => {
     form.bg_color = temp.bg_color;
     form.text_color = temp.text_color;
+    temp.bg_color = "gray-200";
+    temp.text_color = "gray-600";
 };
 
 const resetColor = () => {
@@ -38,22 +41,34 @@ const setTagForm = (tag) => {
     form.text_color = tag.text_color;
 };
 
+const resetForm = () => {
+    form.name = '';
+    form.bg_color = '';
+    form.text_color = '';
+    form.group_id = props.current_group.id
+}
+
 const form = useForm({
     id: "",
     name: "",
     bg_color: "",
     text_color: "",
+    group_id: "",
 });
+
+const storeTag = () => {
+    form.post(route('tags.store'))
+}
 
 const updateTag = (id) => {
     form.patch(route("tags.update", id));
 };
 
 const deleteTag = (id) => {
-    router.delete(route('tags.destroy', id), {
-        onBefore: () => confirm('このタグを削除しますか？')
-    })
-}
+    router.delete(route("tags.destroy", id), {
+        onBefore: () => confirm("このタグを削除しますか？"),
+    });
+};
 </script>
 
 <template>
@@ -100,8 +115,9 @@ const deleteTag = (id) => {
 
                     <!-- タグ新規登録ボタン -->
                     <button
-                        data-modal-target="tag-edit"
-                        data-modal-toggle="tag-edit"
+                        @click="resetForm()"
+                        data-modal-target="tag-create"
+                        data-modal-toggle="tag-create"
                         type="button"
                         class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white"
                     >
@@ -199,7 +215,107 @@ const deleteTag = (id) => {
         </div>
     </div>
 
-    <!-- タグ追加 -->
+    <!-- タグ新規登録 -->
+    <div
+        id="tag-create"
+        tabindex="-1"
+        class="fixed z-60 top-0 left-0 right-0 hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full"
+    >
+        <div class="relative w-full max-w-md max-h-full">
+            <!-- Modal content -->
+            <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+                <!-- Modal header -->
+                <div
+                    class="flex items-center justify-center py-2 px-10 border-b rounded-t dark:border-gray-600"
+                >
+                    <h3
+                        class="text-xl font-medium text-gray-900 dark:text-white"
+                    >
+                        タグ新規登録
+                    </h3>
+                    <button
+                        type="button"
+                        class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                        data-modal-hide="tag-create"
+                    >
+                        <svg
+                            aria-hidden="true"
+                            class="w-5 h-5"
+                            fill="currentColor"
+                            viewBox="0 0 20 20"
+                            xmlns="http://www.w3.org/2000/svg"
+                        >
+                            <path
+                                fill-rule="evenodd"
+                                d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                                clip-rule="evenodd"
+                            ></path>
+                        </svg>
+                        <span class="sr-only">Close modal</span>
+                    </button>
+                </div>
+                <!-- Modal body -->
+                <div class="px-4 space-y-6">
+                    <ul
+                        class="text-sm text-gray-700 dark:text-gray-200"
+                        aria-labelledby="dropdownDividerButton"
+                    >
+                        <li>
+                            <div class="block w-full px-4 py-2 text-gray-800">
+                                <form @submit.prevent="storeTag()">
+                                    <div class="relative z-0 mt-1 mb-3">
+                                        <label for="tag_name" class="text-lg"
+                                            >タグ名</label
+                                        >
+                                        <input
+                                            v-model="form.name"
+                                            type="text"
+                                            id="tag_name"
+                                            class="text-lg text-gray-900 px-0 w-full bg-transparent border-b-2 border-gray-400 border-0 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-gray-400 peer"
+                                            placeholder="タグ名を入力"
+                                        />
+                                    </div>
+                                    <p class="text-lg">背景色</p>
+                                    <button
+                                        data-modal-target="color-edit"
+                                        data-modal-toggle="color-edit"
+                                        :class="`bg-${form.bg_color ? form.bg_color : temp.bg_color}`"
+                                        class="block mx-auto my-3 py-auto w-2/3 sm:w-2/5 p-1 bg-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700"
+                                    >
+                                        <h5
+                                            :class="`text-${form.text_color ? form.text_color : temp.text_color}`"
+                                            class="mx-auto text-lg text-center font-bold tracking-tight text-gray-600 dark:text-white"
+                                        >
+                                            色を選択
+                                        </h5>
+                                    </button>
+                                    <div
+                                        class="flex items-center justify-end px-6 pb-6 left-0 space-x-2 rounded-b dark:border-gray-600"
+                                    >
+                                        <button
+                                            data-modal-hide="tag-create"
+                                            type="submit"
+                                            class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                                        >
+                                            決定
+                                        </button>
+                                        <button
+                                            data-modal-hide="tag-create"
+                                            type="button"
+                                            class="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600"
+                                        >
+                                            キャンセル
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- タグ編集 -->
     <div
         id="tag-edit"
         tabindex="-1"
@@ -263,19 +379,11 @@ const deleteTag = (id) => {
                                     <button
                                         data-modal-target="color-edit"
                                         data-modal-toggle="color-edit"
-                                        :class="`bg-${
-                                            form.bg_color
-                                                ? form.bg_color
-                                                : temp.bg_color
-                                        }`"
+                                        :class="`bg-${form.bg_color}`"
                                         class="block mx-auto my-3 py-auto w-2/3 sm:w-2/5 p-1 bg-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700"
                                     >
                                         <h5
-                                            :class="`text-${
-                                                form.text_color
-                                                    ? form.text_color
-                                                    : temp.text_color
-                                            }`"
+                                            :class="`text-${form.text_color}`"
                                             class="mx-auto text-lg text-center font-bold tracking-tight text-gray-600 dark:text-white"
                                         >
                                             色を選択

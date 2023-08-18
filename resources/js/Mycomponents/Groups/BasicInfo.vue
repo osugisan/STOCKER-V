@@ -98,10 +98,11 @@ const updateGroup = (id) => {
             </button>
 
             <TagList
-                buttonIsActive="true"
+                buttonIsActive
                 modalTitle="タグ編集"
                 modalId="group-id"
                 :tags="props.tags"
+                :current_group="current_group"
             />
 
             <div class="flex justify-center pt-4 border-t">

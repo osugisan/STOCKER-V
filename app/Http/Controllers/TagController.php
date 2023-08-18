@@ -36,7 +36,14 @@ class TagController extends Controller
      */
     public function store(StoreTagRequest $request)
     {
-        //
+        Tag::create([
+            'name' => $request->name,
+            'bg_color' => $request->bg_color,
+            'text_color' => $request->text_color,
+            'group_id' => $request->group_id,
+        ]);
+
+        return to_route('groups.edit');
     }
 
     /**
