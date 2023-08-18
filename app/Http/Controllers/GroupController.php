@@ -82,13 +82,14 @@ class GroupController extends Controller
     {
         $user = Auth::user();
         $current_group = Group::find($user->current_group);
+        dd($current_group->users()->pivot->owner);
 
         $members = $current_group->users;
 
         $tags = Tag::select('id', 'name', 'bg_color', 'text_color', 'group_id')->where('group_id', $current_group->id)->get();
 
         return Inertia::render('Groups', [
-            'user' => Auth::user(),
+            'user' => $user,
             'groups' => $user->groups,
             'current_group' => $current_group,
             'members' => $members,
@@ -156,6 +157,22 @@ class GroupController extends Controller
      */
     public function destroy(Group $group)
     {
-        //
+        $users = $group->users;
+        $deleteId = $group->id;
+
+        $group->delete();
+        
+        foreach($users as $user) {
+            $newGroup = $user->groups()->first();
+            if ($user->main_group === $deleteId) {
+                $user->main_group = $newGroup->id;
+            }
+            if ($user->current_group === $deleteId) {
+                $user->current_group = $newGroup->id;
+            }
+            $user->save();
+        }
+
+        return to_route('profile.edit');
     }
 }

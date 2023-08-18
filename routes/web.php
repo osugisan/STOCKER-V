@@ -57,6 +57,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::put('/groups/{group}', [GroupController::class, 'userUpdate'])->name('groups.user-update');
     Route::post('/groups/{user}/fire', [GroupController::class, 'fire'])->name('groups.fire');
     Route::post('/groups', [GroupController::class, 'store'])->name('groups.store');
+    Route::delete('/groups/{group}', [GroupController::class, 'destroy'])->name('groups.destroy');
 
     Route::post('/tags', [TagController::class, 'store'])->name('tags.store');
     Route::patch('/tags/{tag}', [TagController::class, 'update'])->name('tags.update');
