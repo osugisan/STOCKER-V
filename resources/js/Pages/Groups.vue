@@ -22,6 +22,7 @@ const props = defineProps({
     current_group: Object,
     members: Array,
     tags: Array,
+    groupOwner: Boolean,
 });
 
 const deleteGroup = (id) => {
@@ -64,6 +65,7 @@ const deleteGroup = (id) => {
 
                 <div class="p-2 mx-auto lg:w-2/3">
                     <button
+                        v-show="props.groupOwner === 1"
                         @click="deleteGroup(current_group.id)"
                         type="button"
                         class="block mx-auto mt-4 focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900"

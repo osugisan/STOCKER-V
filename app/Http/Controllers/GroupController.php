@@ -82,7 +82,7 @@ class GroupController extends Controller
     {
         $user = Auth::user();
         $current_group = Group::find($user->current_group);
-        dd($current_group->users()->pivot->owner);
+        $groupOwner = $current_group->users()->find($user->id)->pivot->owner;
 
         $members = $current_group->users;
 
@@ -94,6 +94,7 @@ class GroupController extends Controller
             'current_group' => $current_group,
             'members' => $members,
             'tags' => $tags,
+            'groupOwner' => $groupOwner,
         ]);
     }
 
