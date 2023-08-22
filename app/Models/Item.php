@@ -17,4 +17,9 @@ class Item extends Model
         'code',
         'item_img',
     ];
+
+    public function group() 
+    {
+        return $this->belongsTo(Group::class);
+    }
 }

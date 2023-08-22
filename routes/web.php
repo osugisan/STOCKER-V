@@ -28,9 +28,9 @@ Route::get('/', function () {
     ]);
 });
 
-Route::get('/items', function () {
-    return Inertia::render('Items/Index');
-})->middleware(['auth', 'verified'])->name('items.index');
+// Route::get('/items', function () {
+//     return Inertia::render('Items/Index');
+// })->middleware(['auth', 'verified'])->name('items.index');
 
 Route::get('/items/create', function () {
     $randomNumber = rand(1, 6);
@@ -64,7 +64,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::patch('/tags/{tag}', [TagController::class, 'update'])->name('tags.update');
     Route::delete('/tags/{tag}', [TagController::class, 'destroy'])->name('tags.destroy');
 
-    // Route::resource('items', ItemController::class);
+    Route::resource('items', ItemController::class);
 });
 
 require __DIR__.'/auth.php';

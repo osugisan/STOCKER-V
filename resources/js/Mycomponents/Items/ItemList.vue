@@ -1,5 +1,9 @@
 <script setup>
 import { Link } from "@inertiajs/vue3";
+
+const props = defineProps({
+    items: Array,
+});
 </script>
 
 <template>
@@ -8,7 +12,11 @@ import { Link } from "@inertiajs/vue3";
         <div class="container px-5 py-10 mx-auto">
             <div class="flex flex-wrap -m-4">
                 <!-- カード大 -->
-                <div class="p-2 lg:w-1/3">
+                <div
+                    v-for="item in props.items"
+                    :key="item.id"
+                    class="p-2 lg:w-1/3"
+                >
                     <div
                         class="grid grid-cols-12 bg-white bg-opacity-90 px-4 py-4 rounded-lg overflow-hidden shadow-lg"
                     >
@@ -16,16 +24,16 @@ import { Link } from "@inertiajs/vue3";
                             <h1
                                 class="title-font sm:text-2xl text-xl font-medium text-gray-900 mb-1"
                             >
-                                アイテム１
+                                {{ item.name }}
                             </h1>
                             <p class="leading-relaxed inline-flex">在庫数：</p>
                             <h1
                                 class="inline-flex title-font sm:text-2xl text-xl font-medium text-gray-900 mb-3"
                             >
-                                3
+                                {{ item.qty }}
                             </h1>
-                            <p class="leading-relaxed inline-flex">/ 5</p>
-                            <p class="leading-relaxed pb-3">アイテムメモ</p>
+                            <p class="leading-relaxed inline-flex">/ {{ item.basic_stock }}</p>
+                            <p class="leading-relaxed pb-3">{{ item.memo }}</p>
                             <span
                                 class="bg-blue-100 text-blue-800 text-sm font-medium mr-2 px-2.5 py-0.5 mb-3 rounded-full dark:bg-blue-900 dark:text-blue-300"
                                 >Default</span

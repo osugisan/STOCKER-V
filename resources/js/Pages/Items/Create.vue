@@ -1,6 +1,6 @@
 <script setup>
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
-import ItemHistory from "@/Mycomponents/ItemHistory.vue";
+import ItemHistory from "@/Mycomponents/Items/ItemHistory.vue";
 import ReturnButton from "@/Mycomponents/ReturnButton.vue";
 import BasicInfo from "@/Mycomponents/Items/BasicInfo.vue";
 import DetailInfo from "@/Mycomponents/Items/DetailInfo.vue";

@@ -4,7 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreItemRequest;
 use App\Http\Requests\UpdateItemRequest;
+use App\Models\Group;
 use App\Models\Item;
+use Illuminate\Support\Facades\Auth;
+use Inertia\Inertia;
 
 class ItemController extends Controller
 {
@@ -15,7 +18,15 @@ class ItemController extends Controller
      */
     public function index()
     {
-        //
+        $user = Auth::user();
+        $current_group = Group::find($user->current_group);
+        $items = $current_group->items()->select('name', 'qty', 'basic_stock', 'memo', 'code', 'item_img')->get();
+
+        return Inertia::render('Items/Index', [
+            'user' => $user,
+            'current_group' => $current_group,
+            'items' => $items,
+        ]);
     }
 
     /**

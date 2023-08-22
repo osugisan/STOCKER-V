@@ -1,5 +1,5 @@
 <script setup>
-import TagList from "@/Mycomponents/TagList.vue";
+import TagList from "@/Mycomponents/Groups/TagList.vue";
 </script>
 
 <template>

@@ -1,5 +1,5 @@
 <script setup>
-import TagList from "@/Mycomponents/TagList.vue";
+import TagList from "@/Mycomponents/Groups/TagList.vue";
 import SuccessMessage from "@/Mycomponents/SuccessMessage.vue";
 import InputIcon from "@/Mycomponents/InputIcon.vue";
 import InputError from "@/Components/InputError.vue";

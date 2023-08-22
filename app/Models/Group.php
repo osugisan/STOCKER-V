@@ -19,4 +19,9 @@ class Group extends Model
         return $this->belongsToMany(User::class)
             ->withPivot('owner');
     }
+
+    public function items()
+    {
+        return $this->hasMany(Item::class);
+    }
 }
