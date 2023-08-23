@@ -48,8 +48,18 @@ class DatabaseSeeder extends Seeder
                 $user->save();
         }
         
-        Tag::factory(50)->create();
-        Item::factory(100)->create();
+        $tags = Tag::factory(50)->create();
+        
+        Item::factory(100)->create()
+            ->each(function (Item $item) use ($tags) {
+                $tagIds = [];
+
+                for ($i = 1; $i < rand(1, 5); $i++) {
+                    $tagIds[] = rand(1, 50);
+                }
+
+                $item->tags()->attach($tagIds);
+            });
             
             // \App\Models\User::factory(10)->create();
             

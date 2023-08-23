@@ -32,11 +32,11 @@ Route::get('/', function () {
 //     return Inertia::render('Items/Index');
 // })->middleware(['auth', 'verified'])->name('items.index');
 
-Route::get('/items/create', function () {
-    $randomNumber = rand(1, 6);
-    $imagePath = "/images/item-{$randomNumber}.jpg";
-    return Inertia::render('Items/Create', [ 'imagePath' => $imagePath ]);
-})->middleware(['auth', 'verified'])->name('items.create');
+// Route::get('/items/create', function () {
+//     $randomNumber = rand(1, 6);
+//     $imagePath = "/images/item-{$randomNumber}.jpg";
+//     return Inertia::render('Items/Create', [ 'imagePath' => $imagePath ]);
+// })->middleware(['auth', 'verified'])->name('items.create');
 
 Route::get('/items/show', function () {
     return Inertia::render('Items/Show');

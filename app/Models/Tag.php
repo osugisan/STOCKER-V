@@ -15,4 +15,9 @@ class Tag extends Model
         'text_color',
         'group_id',
     ];
+
+    public function items()
+    {
+        return $this->belongsToMany(Item::class);
+    }
 }
