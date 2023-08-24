@@ -35,8 +35,11 @@ const props = defineProps({
                             <p class="leading-relaxed inline-flex">/ {{ item.basic_stock }}</p>
                             <p class="leading-relaxed pb-3">{{ item.memo }}</p>
                             <span
-                                class="bg-blue-100 text-blue-800 text-sm font-medium mr-2 px-2.5 py-0.5 mb-3 rounded-full dark:bg-blue-900 dark:text-blue-300"
-                                >Default</span
+                                v-for="tag in item.tags"
+                                :key="tag.id"
+                                :class="`bg-${tag.bg_color} text-${tag.text_color}`"
+                                class="text-sm font-medium mr-2 px-2.5 py-0.5 mb-3 rounded-full dark:bg-blue-900 dark:text-blue-300"
+                                >{{ tag.name }}</span
                             >
                         </Link>
 

@@ -20,7 +20,7 @@ class ItemController extends Controller
     {
         $user = Auth::user();
         $current_group = Group::find($user->current_group);
-        $items = $current_group->items()->select('name', 'qty', 'basic_stock', 'memo', 'code', 'item_img')->get();
+        $items = $current_group->items()->with('tags')->get();
 
         return Inertia::render('Items/Index', [
             'user' => $user,
