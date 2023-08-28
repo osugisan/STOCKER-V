@@ -1,9 +1,21 @@
 <script setup>
-import { Link } from "@inertiajs/vue3";
+import { Link, router } from "@inertiajs/vue3";
+import { computed } from "vue";
 
 const props = defineProps({
     items: Array,
+    user: Object,
 });
+
+computed;
+
+const load = () => {
+    console.log(load);
+};
+
+const unload = () => {
+    console.log(unload);
+};
 </script>
 
 <template>
@@ -18,6 +30,7 @@ const props = defineProps({
                     class="p-2 lg:w-1/3"
                 >
                     <div
+                        v-show="props.user.large_item === 1"
                         class="grid grid-cols-12 bg-white bg-opacity-90 px-4 py-4 rounded-lg overflow-hidden shadow-lg"
                     >
                         <Link href="items/show" class="col-span-9">
@@ -32,8 +45,12 @@ const props = defineProps({
                             >
                                 {{ item.qty }}
                             </h1>
-                            <p class="leading-relaxed inline-flex">/ {{ item.basic_stock }}</p>
-                            <p class="leading-relaxed pb-3">{{ item.memo }}</p>
+                            <p class="leading-relaxed inline-flex">
+                                / {{ item.basic_stock }}
+                            </p>
+                            <p class="leading-relaxed pb-3">
+                                {{ item.memo }}
+                            </p>
                             <span
                                 v-for="tag in item.tags"
                                 :key="tag.id"
@@ -56,15 +73,19 @@ const props = defineProps({
                         ></span>
 
                         <div class="col-span-10 my-auto">
-                            <a
+                            <button
+                                @click="unload()"
                                 class="text-red-500 inline-flex items-center mx-4"
                             >
                                 一つ取り出す
-                            </a>
+                            </button>
 
-                            <a class="text-indigo-500 inline-flex items-center"
-                                >一つ追加する</a
+                            <button
+                                @click="load()"
+                                class="text-indigo-500 inline-flex items-center"
                             >
+                                一つ追加する
+                            </button>
                         </div>
 
                         <div class="col-span-2">
@@ -115,8 +136,13 @@ const props = defineProps({
                 <!-- カード大 -->
 
                 <!-- カード小 -->
-                <div class="p-2 lg:w-1/3">
+                <div
+                    v-for="item in props.items"
+                    :key="item.id"
+                    class="p-2 lg:w-1/3"
+                >
                     <div
+                        v-show="props.user.large_item === 0"
                         class="grid grid-cols-12 bg-white bg-opacity-90 p-2 rounded-lg overflow-hidden shadow-lg"
                     >
                         <div class="col-span-2 my-auto">
@@ -133,30 +159,33 @@ const props = defineProps({
                                     <h1
                                         class="title-font sm:text-lg text-lg font-medium text-gray-900 mb-1"
                                     >
-                                        アイテム１
+                                        {{ item.name }}
                                     </h1>
                                 </div>
-                                <div class="col-span-2 ml-auto my-auto">
+                                <div class="col-span-3 ml-auto my-auto">
                                     <h1
                                         class="inline-flex title-font sm:text-lg text-lg font-medium text-gray-900"
                                     >
-                                        3
+                                        {{ item.qty }}
                                     </h1>
                                     <p class="leading-relaxed inline-flex">
-                                        / 5
+                                        / {{ item.basic_stock }}
                                     </p>
                                 </div>
-                                <div class="col-span-10 ml-auto my-auto">
+                                <div class="col-span-9 ml-auto my-auto">
                                     <span
+                                        v-for="tag in item.tags"
+                                        :key="tag.id"
+                                        :class="`bg-${tag.bg_color} text-${tag.text_color}`"
                                         class="bg-blue-100 text-blue-800 text-sm font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300"
-                                        >テ</span
+                                        >{{ tag.name.slice(0, 1) }}</span
                                     >
                                 </div>
                             </div>
                         </div>
 
                         <div class="col-span-3 my-auto">
-                            <button>
+                            <button @click="unload()">
                                 <svg
                                     class="inline-flex w-10 text-red-500"
                                     fill="none"
@@ -173,7 +202,7 @@ const props = defineProps({
                                     ></path>
                                 </svg>
                             </button>
-                            <button>
+                            <button @click="load()">
                                 <svg
                                     class="inline-flex w-10"
                                     fill="none"
